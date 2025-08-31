@@ -1,0 +1,3 @@
+public enum ServiceStatus {
+    CREATED, ASSIGNED, IN_PROGRESS, PAUSED, COMPLETED, CANCELED
+}

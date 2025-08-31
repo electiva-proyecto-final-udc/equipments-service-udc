@@ -1,0 +1,46 @@
+@Entity
+@Table(name = "maintenance_service")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class MaintenanceService extends BaseEntity {
+    @ManyToOne(optional = false) @JoinColumn(name = "equipment_id")
+    private Equipment equipment;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MaintenanceType type;
+
+    @Column(nullable = false)
+    private LocalDateTime createdDate;
+
+    private LocalDate deliveryCommitment;
+
+    @Column(length = 500)
+    private String reportedProblem;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PriorityLevel priority;
+
+    @Column(nullable = false)
+    private UUID technicianId;   // Reference to Users microservice
+
+    @Column(length = 1000)
+    private String executedActivity;
+
+    @Column(length = 1000)
+    private String description;
+
+    @Column(length = 1000)
+    private String recommendations;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ServiceStatus status;
+
+    @OneToOne(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Checklist checklist;
+}
