@@ -4,7 +4,10 @@ import com.udc.gestionEquipos.models.CompressorSpecs;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface CompressorSpecsRepository extends JpaRepository<CompressorSpecs, UUID> {}
+public interface CompressorSpecsRepository extends JpaRepository<CompressorSpecs, UUID> {
+    Optional<CompressorSpecs> findByEquipmentId(UUID equipmentId);
+}
