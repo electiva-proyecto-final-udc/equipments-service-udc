@@ -1,10 +1,21 @@
-@Entity @Table(name = "compressor_specs")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+package com.udc.gestionEquipos.models;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "compressor_specs")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CompressorSpecs extends BaseEntity {
     public enum CompressorType { OIL, DRY }
     public enum HeadType { SINGLE, V }
 
-    @OneToOne @JoinColumn(name = "equipment_id", nullable = false, unique = true)
+    @OneToOne
+    @JoinColumn(name = "equipment_id", nullable = false, unique = true)
     private Equipment equipment;
 
     private String brand;

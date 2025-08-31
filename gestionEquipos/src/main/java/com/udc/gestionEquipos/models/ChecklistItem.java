@@ -1,3 +1,12 @@
+package com.udc.gestionEquipos.models;
+
+import com.udc.gestionEquipos.models.enums.ChecklistItemStatus;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.*;
+
 @Embeddable
 @Getter
 @Setter

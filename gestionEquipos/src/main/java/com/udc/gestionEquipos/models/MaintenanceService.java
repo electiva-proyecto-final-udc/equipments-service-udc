@@ -1,3 +1,15 @@
+package com.udc.gestionEquipos.models;
+
+import com.udc.gestionEquipos.models.enums.MaintenanceType;
+import com.udc.gestionEquipos.models.enums.PriorityLevel;
+import com.udc.gestionEquipos.models.enums.ServiceStatus;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Entity
 @Table(name = "maintenance_service")
 @Getter

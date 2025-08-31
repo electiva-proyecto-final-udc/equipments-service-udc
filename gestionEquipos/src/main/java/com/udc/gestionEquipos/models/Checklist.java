@@ -1,10 +1,25 @@
+package com.udc.gestionEquipos.models;
+
+import com.udc.gestionEquipos.models.enums.EquipmentType;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Map;
+
 @Entity
 @Table(name = "checklist")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Checklist extends BaseEntity {
+
     @OneToOne @JoinColumn(name = "service_id", nullable = false, unique = true)
     private MaintenanceService service;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private EquipmentType equipmentType;
 
     @ElementCollection

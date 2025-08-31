@@ -1,7 +1,21 @@
-@Entity @Table(name = "generator_specs")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+package com.udc.gestionEquipos.models;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.*;
+
+@Entity
+@Table(name = "generator_specs")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class GeneratorSpecs extends BaseEntity {
-    @OneToOne @JoinColumn(name = "equipment_id", nullable = false, unique = true)
+    @OneToOne
+    @JoinColumn(name = "equipment_id", nullable = false, unique = true)
     private Equipment equipment;
 
     private String plantBrand;
@@ -20,3 +34,4 @@ public class GeneratorSpecs extends BaseEntity {
     private Integer workingHours;
     private String cpl;
 }
+

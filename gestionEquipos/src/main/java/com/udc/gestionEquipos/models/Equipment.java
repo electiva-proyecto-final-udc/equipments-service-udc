@@ -1,3 +1,13 @@
+package com.udc.gestionEquipos.models;
+
+import com.udc.gestionEquipos.models.enums.EquipmentStatus;
+import com.udc.gestionEquipos.models.enums.EquipmentType;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
+import java.util.UUID;
+
 @Entity
 @Table(name = "equipment")
 @Getter
