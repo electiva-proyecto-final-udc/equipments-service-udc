@@ -4,11 +4,13 @@ import com.udc.gestionEquipos.models.Checklist;
 import com.udc.gestionEquipos.models.enums.EquipmentType;
 import com.udc.gestionEquipos.repositories.ChecklistRepository;
 import com.udc.gestionEquipos.services.ChecklistService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class ChecklistServiceImpl implements ChecklistService {
     private final ChecklistRepository checklistRepository;
 
