@@ -1,5 +1,6 @@
 package com.udc.gestionEquipos.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.udc.gestionEquipos.models.enums.MaintenanceType;
 import com.udc.gestionEquipos.models.enums.PriorityLevel;
 import com.udc.gestionEquipos.models.enums.ServiceStatus;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class MaintenanceService extends BaseEntity {
+    @JsonBackReference
     @ManyToOne(optional = false) @JoinColumn(name = "equipment_id")
     private Equipment equipment;
 

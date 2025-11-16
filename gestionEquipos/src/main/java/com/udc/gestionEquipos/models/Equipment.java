@@ -1,5 +1,6 @@
 package com.udc.gestionEquipos.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.udc.gestionEquipos.models.enums.EquipmentStatus;
 import com.udc.gestionEquipos.models.enums.EquipmentType;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+
 @Table(name = "equipment")
 @Getter
 @Setter
@@ -33,15 +35,19 @@ public class Equipment extends BaseEntity {
     @Column(nullable = false)
     private UUID clientId;  // Reference to Users microservice
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MaintenanceService> services;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
     private GeneratorSpecs generatorSpecs;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
     private PumpSpecs pumpSpecs;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
     private CompressorSpecs compressorSpecs;
 }

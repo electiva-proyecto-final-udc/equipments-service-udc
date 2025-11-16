@@ -1,5 +1,6 @@
 package com.udc.gestionEquipos.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -16,6 +17,7 @@ import lombok.*;
 public class PumpSpecs extends BaseEntity {
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "equipment_id", nullable = false, unique = true)
     private Equipment equipment;
 

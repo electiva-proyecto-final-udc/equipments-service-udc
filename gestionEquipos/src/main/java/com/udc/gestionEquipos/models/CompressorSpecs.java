@@ -1,5 +1,6 @@
 package com.udc.gestionEquipos.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,6 +16,7 @@ public class CompressorSpecs extends BaseEntity {
     public enum HeadType { SINGLE, V }
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "equipment_id", nullable = false, unique = true)
     private Equipment equipment;
 
