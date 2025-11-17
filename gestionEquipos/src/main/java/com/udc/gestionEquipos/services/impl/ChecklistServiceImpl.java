@@ -20,8 +20,15 @@ public class ChecklistServiceImpl implements ChecklistService {
 
     @Override
     public Checklist createChecklist(Checklist checklist) {
+
+        // Asegurar relación bidireccional
+        if (checklist.getItems() != null) {
+            checklist.getItems().forEach(item -> item.setChecklist(checklist));
+        }
+
         return checklistRepository.save(checklist);
     }
+
 
     @Override
     public List<Checklist> getAllChecklists() {

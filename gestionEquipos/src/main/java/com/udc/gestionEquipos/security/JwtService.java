@@ -27,9 +27,11 @@ public class JwtService {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (JwtException | IllegalArgumentException ex) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return false;
         }
+
     }
 
     public String extractUsername(String token) {

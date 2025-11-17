@@ -36,7 +36,7 @@ public class MaintenanceServiceServiceImpl implements MaintenanceServiceService 
 
     @Override
     public List<MaintenanceService> getServicesByEquipment(UUID equipmentId) {
-        return repository.findByEquipmentId(equipmentId);
+        return repository.findByEquipment_Id(equipmentId);
     }
 
     @Override
