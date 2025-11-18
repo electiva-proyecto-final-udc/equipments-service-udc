@@ -1,6 +1,7 @@
 package com.udc.gestionEquipos.controllers;
 
 import com.udc.gestionEquipos.models.Equipment;
+import com.udc.gestionEquipos.models.dto.EquipmentDetailsDTO;
 import com.udc.gestionEquipos.models.enums.EquipmentStatus;
 import com.udc.gestionEquipos.models.enums.EquipmentType;
 import com.udc.gestionEquipos.services.EquipmentService;
@@ -55,6 +56,19 @@ public class EquipmentController {
         return service.getEquipmentById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Get equipment details by ID", description = "Retrieve details of a specific equipment by its ID including client data")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Equipment found"),
+            @ApiResponse(responseCode = "404", description = "Equipment not found")
+    })
+    @GetMapping("/details/{id}")
+    public EquipmentDetailsDTO getDetailsById(
+            @Parameter(description = "UUID of the equipment to retrieve")
+            @PathVariable UUID id,
+            @RequestHeader("Authorization") String token) {
+        return service.getEquipmentDetails(id, token);
     }
 
     @Operation(summary = "Get equipment by type", description = "Retrieve equipment filtered by type")

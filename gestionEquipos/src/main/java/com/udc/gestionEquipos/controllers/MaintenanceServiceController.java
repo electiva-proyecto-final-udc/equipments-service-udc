@@ -31,8 +31,9 @@ public class MaintenanceServiceController {
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     @PostMapping
-    public ResponseEntity<MaintenanceService> create(@RequestBody MaintenanceService maintenanceService) {
-        return ResponseEntity.ok(service.createService(maintenanceService));
+    public ResponseEntity<MaintenanceService> create(@RequestBody MaintenanceService maintenanceService,
+                                                     @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(service.createService(maintenanceService, token));
     }
 
     @Operation(summary = "Get all services", description = "Retrieves a list of all maintenance services")

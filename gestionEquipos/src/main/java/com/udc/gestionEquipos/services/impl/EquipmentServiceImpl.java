@@ -1,10 +1,13 @@
 package com.udc.gestionEquipos.services.impl;
 
 import com.udc.gestionEquipos.models.Equipment;
+import com.udc.gestionEquipos.models.dto.EquipmentDetailsDTO;
+import com.udc.gestionEquipos.models.dto.userService.GetPersonByIdResponse;
 import com.udc.gestionEquipos.models.enums.EquipmentStatus;
 import com.udc.gestionEquipos.models.enums.EquipmentType;
 import com.udc.gestionEquipos.repositories.EquipmentRepository;
 import com.udc.gestionEquipos.services.EquipmentService;
+import com.udc.gestionEquipos.services.externalServices.UserServiceClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +18,11 @@ import java.util.UUID;
 public class EquipmentServiceImpl implements EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
+    private final UserServiceClient userClient;
 
-    public EquipmentServiceImpl(EquipmentRepository equipmentRepository) {
+    public EquipmentServiceImpl(EquipmentRepository equipmentRepository, UserServiceClient userClient) {
         this.equipmentRepository = equipmentRepository;
+        this.userClient = userClient;
     }
 
     @Override
@@ -61,6 +66,21 @@ public class EquipmentServiceImpl implements EquipmentService {
                     return equipmentRepository.save(existing);
                 })
                 .orElseThrow(() -> new RuntimeException("Equipment not found with id: " + id));
+    }
+
+    public EquipmentDetailsDTO getEquipmentDetails(UUID id, String token) {
+        Equipment equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+
+        GetPersonByIdResponse.UserData client = userClient.getUserById(equipment.getClientId().toString(), token);
+        return EquipmentDetailsDTO.builder()
+                .id(equipment.getId())
+                .code(equipment.getCode())
+                .type(equipment.getType().name())
+                .status(equipment.getStatus().name())
+                .location(equipment.getLocation())
+                .client(client)
+                .build();
     }
 
     @Override

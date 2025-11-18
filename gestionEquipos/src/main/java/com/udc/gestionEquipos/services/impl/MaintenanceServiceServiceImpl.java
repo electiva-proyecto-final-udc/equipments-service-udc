@@ -1,9 +1,16 @@
 package com.udc.gestionEquipos.services.impl;
 
+import com.udc.gestionEquipos.models.Equipment;
 import com.udc.gestionEquipos.models.MaintenanceService;
+import com.udc.gestionEquipos.models.dto.notificationService.NotificationResponse;
+import com.udc.gestionEquipos.models.dto.notificationService.TechnicianAssignedEmailPayload;
+import com.udc.gestionEquipos.models.dto.userService.GetPersonByIdResponse;
 import com.udc.gestionEquipos.models.enums.ServiceStatus;
 import com.udc.gestionEquipos.repositories.MaintenanceServiceRepository;
+import com.udc.gestionEquipos.services.EquipmentService;
 import com.udc.gestionEquipos.services.MaintenanceServiceService;
+import com.udc.gestionEquipos.services.externalServices.NotificationServiceClient;
+import com.udc.gestionEquipos.services.externalServices.UserServiceClient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,15 +21,48 @@ import java.util.UUID;
 public class MaintenanceServiceServiceImpl implements MaintenanceServiceService {
 
     private final MaintenanceServiceRepository repository;
+    private final NotificationServiceClient notificationClient;
+    private final UserServiceClient userClient;
+    private final EquipmentService equipmentService;
 
-    public MaintenanceServiceServiceImpl(MaintenanceServiceRepository repository) {
+    public MaintenanceServiceServiceImpl(MaintenanceServiceRepository repository, NotificationServiceClient notificationClient, UserServiceClient userClient, EquipmentService equipmentService) {
         this.repository = repository;
+        this.notificationClient = notificationClient;
+        this.userClient = userClient;
+        this.equipmentService = equipmentService;
     }
 
     @Override
-    public MaintenanceService createService(MaintenanceService service) {
+    public MaintenanceService createService(MaintenanceService service, String token) {
+        Optional<Equipment> equipment = equipmentService.getEquipmentById(service.getEquipmentId());
+        Equipment eq = equipment
+                .orElseThrow(() -> new RuntimeException("Equipment not found"));
+
+
+        GetPersonByIdResponse.UserData technician =
+                userClient.getTechnicianById(service.getTechnicianId().toString(), token);
+
+        GetPersonByIdResponse.UserData client = userClient.getUserById(eq.getClientId().toString(), token);
+        // Construir el payload del correo
+        TechnicianAssignedEmailPayload payload = new TechnicianAssignedEmailPayload(
+                technician.getEmail(),
+                technician.getName() + " " + technician.getSurname(),
+                service.getCode(),
+                eq.getType().toString(),
+                client.getName() + " " + client.getSurname(),
+                service.getDescription(),
+                service.getDeliveryCommitment().toString(),
+                service.getPriority().toString()
+        );
+
+        // Enviar notificación al micro de correos
+        NotificationResponse notification =
+                notificationClient.sendTechnicianAssigned(payload, token);
+
+        // Guardar y devolver el servicio
         return repository.save(service);
     }
+
 
     @Override
     public List<MaintenanceService> getAllServices() {

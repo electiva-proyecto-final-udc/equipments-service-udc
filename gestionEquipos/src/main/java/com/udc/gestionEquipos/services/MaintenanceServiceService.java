@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface MaintenanceServiceService {
 
-    MaintenanceService createService(MaintenanceService service);
+    MaintenanceService createService(MaintenanceService service, String token);
 
     List<MaintenanceService> getAllServices();
 

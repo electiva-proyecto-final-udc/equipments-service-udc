@@ -1,6 +1,7 @@
 package com.udc.gestionEquipos.services;
 
 import com.udc.gestionEquipos.models.Equipment;
+import com.udc.gestionEquipos.models.dto.EquipmentDetailsDTO;
 import com.udc.gestionEquipos.models.enums.EquipmentStatus;
 import com.udc.gestionEquipos.models.enums.EquipmentType;
 
@@ -22,6 +23,8 @@ public interface EquipmentService {
     List<Equipment> getEquipmentByClientId(UUID clientId);
 
     Equipment updateEquipment(UUID id, Equipment equipment);
+
+    EquipmentDetailsDTO getEquipmentDetails(UUID id, String token);
 
     void deleteEquipment(UUID id);
 }
