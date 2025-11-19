@@ -2,6 +2,7 @@ package com.udc.gestionEquipos.services.impl;
 
 import com.udc.gestionEquipos.models.Equipment;
 import com.udc.gestionEquipos.models.dto.EquipmentDetailsDTO;
+import com.udc.gestionEquipos.models.dto.EquipmentWithClientDTO;
 import com.udc.gestionEquipos.models.dto.userService.GetPersonByIdResponse;
 import com.udc.gestionEquipos.models.enums.EquipmentStatus;
 import com.udc.gestionEquipos.models.enums.EquipmentType;
@@ -10,9 +11,8 @@ import com.udc.gestionEquipos.services.EquipmentService;
 import com.udc.gestionEquipos.services.externalServices.UserServiceClient;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EquipmentServiceImpl implements EquipmentService {
@@ -82,6 +82,41 @@ public class EquipmentServiceImpl implements EquipmentService {
                 .client(client)
                 .build();
     }
+
+    public List<EquipmentWithClientDTO> getEquipmentWithClientData(String token) {
+
+        List<Equipment> equipments = equipmentRepository.findAll();
+
+        // Obtener solo los IDs únicos
+        Set<UUID> clientIds = equipments.stream()
+                .map(Equipment::getClientId)
+                .collect(Collectors.toSet());
+
+        // Resolver clientes llamando al micro de usuarios
+        Map<UUID, GetPersonByIdResponse.UserData> clientsById = new HashMap<>();
+
+        for (UUID clientId : clientIds) {
+            GetPersonByIdResponse.UserData client = userClient.getUserById(clientId.toString(), token);
+            clientsById.put(clientId, client);
+        }
+
+        // Armar la respuesta final
+        return equipments.stream()
+                .map(e -> {
+                    GetPersonByIdResponse.UserData c = clientsById.get(e.getClientId());
+                    return new EquipmentWithClientDTO(
+                            e.getId(),
+                            e.getCode(),
+                            e.getCreatedAt(),
+                            e.getStatus().name(),
+                            e.getType().name(),
+                            e.getClientId(),
+                            c != null ? c.getName() + " " + c.getSurname() : null
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public void deleteEquipment(UUID id) {

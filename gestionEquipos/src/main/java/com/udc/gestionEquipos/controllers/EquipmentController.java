@@ -2,6 +2,7 @@ package com.udc.gestionEquipos.controllers;
 
 import com.udc.gestionEquipos.models.Equipment;
 import com.udc.gestionEquipos.models.dto.EquipmentDetailsDTO;
+import com.udc.gestionEquipos.models.dto.EquipmentWithClientDTO;
 import com.udc.gestionEquipos.models.enums.EquipmentStatus;
 import com.udc.gestionEquipos.models.enums.EquipmentType;
 import com.udc.gestionEquipos.services.EquipmentService;
@@ -42,6 +43,16 @@ public class EquipmentController {
     @GetMapping
     public ResponseEntity<List<Equipment>> getAll() {
         return ResponseEntity.ok(service.getAllEquipment());
+    }
+
+    @Operation(summary = "Get all equipment with its client", description = "Retrieves a list of all registered equipment with its client")
+    @ApiResponse(responseCode = "200", description = "List of equipment")
+    @GetMapping("/withClients")
+    public ResponseEntity<List<EquipmentWithClientDTO>> getAllDetailed(
+            @RequestHeader("Authorization") String token
+    ) {
+        List<EquipmentWithClientDTO> data = service.getEquipmentWithClientData(token);
+        return ResponseEntity.ok(data);
     }
 
     @Operation(summary = "Get equipment by ID", description = "Retrieve details of a specific equipment by its ID")
@@ -123,4 +134,5 @@ public class EquipmentController {
         service.deleteEquipment(id);
         return ResponseEntity.noContent().build();
     }
+
 }
