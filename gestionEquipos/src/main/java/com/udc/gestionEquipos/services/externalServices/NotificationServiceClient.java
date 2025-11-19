@@ -1,6 +1,7 @@
 package com.udc.gestionEquipos.services.externalServices;
 
 import com.udc.gestionEquipos.models.dto.notificationService.NotificationResponse;
+import com.udc.gestionEquipos.models.dto.notificationService.PostEmail;
 import com.udc.gestionEquipos.models.dto.notificationService.TechnicianAssignedEmailPayload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -39,18 +40,37 @@ public class NotificationServiceClient {
     }
 
     public NotificationResponse sendTechnicianAssigned(
-            TechnicianAssignedEmailPayload payload,
+            PostEmail payload,
             String token
     ) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
         headers.set("Content-Type", "application/json");
 
-        HttpEntity<TechnicianAssignedEmailPayload> entity =
+        HttpEntity<PostEmail> entity =
                 new HttpEntity<>(payload, headers);
 
         return restTemplate.exchange(
                 notificationServiceUrl + "/notification-service/equipments/register",
+                HttpMethod.POST,
+                entity,
+                NotificationResponse.class
+        ).getBody();
+    }
+
+    public NotificationResponse sendFinishReparationEmail(
+            PostEmail payload,
+            String token
+    ) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+        headers.set("Content-Type", "application/json");
+
+        HttpEntity<PostEmail> entity =
+                new HttpEntity<>(payload, headers);
+
+        return restTemplate.exchange(
+                notificationServiceUrl + "/notification-service/reparations/finishReparation",
                 HttpMethod.POST,
                 entity,
                 NotificationResponse.class

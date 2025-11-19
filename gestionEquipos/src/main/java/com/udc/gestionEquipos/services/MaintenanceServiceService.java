@@ -21,7 +21,7 @@ public interface MaintenanceServiceService {
 
     List<MaintenanceService> getServicesByStatus(ServiceStatus status);
 
-    MaintenanceService updateService(UUID id, MaintenanceService service);
+    MaintenanceService updateService(UUID id, MaintenanceService service, String token);
 
     void deleteService(UUID id);
 }

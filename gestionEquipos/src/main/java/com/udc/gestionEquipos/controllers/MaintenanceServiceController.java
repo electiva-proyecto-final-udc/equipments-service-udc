@@ -93,8 +93,9 @@ public class MaintenanceServiceController {
     public ResponseEntity<MaintenanceService> update(
             @Parameter(description = "UUID of the maintenance service to update")
             @PathVariable UUID id,
-            @RequestBody MaintenanceService maintenanceService) {
-        return ResponseEntity.ok(service.updateService(id, maintenanceService));
+            @RequestBody MaintenanceService maintenanceService,
+            @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(service.updateService(id, maintenanceService, token));
     }
 
     @Operation(summary = "Delete maintenance service", description = "Deletes a maintenance service by its ID")
